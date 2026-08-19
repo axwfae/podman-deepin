@@ -5,6 +5,7 @@ xhost + > /dev/null 2>&1
 _init(){
     podman run -d --name deepin \
         --device /dev/snd --ipc="host"\
+        --userns=keep-id \
         -v $HOME/deepin:/home/deepin \
         -v /tmp/.X11-unix:/tmp/.X11-unix \
         -v $HOME:$HOME\
