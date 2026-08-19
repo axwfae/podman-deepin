@@ -62,7 +62,7 @@ _install_in_container(){
     if [[ $? -ne 0 ]]; then
         #install
         echo "Install to container..."
-        podman exec -t deepin apt install -y ${app}
+        podman exec -u 0 -t deepin apt install -y ${app}
         return $?
     fi
     return 0
@@ -216,7 +216,7 @@ case $cmd in
         run $2
     ;;
     --install|install)
-        timeout 20 podman exec -t deepin sh -c "apt update"
+        timeout 20 podman exec -u 0 -t deepin sh -c "apt update"
         l=(${@})
         for app in ${l[@]:1} ; do
             echo "install $app"
