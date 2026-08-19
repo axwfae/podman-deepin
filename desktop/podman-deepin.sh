@@ -24,19 +24,22 @@ _init(){
 }
 
 check_container(){
+    local attempts=0
     while [[ "$(podman inspect -f '{{.State.Running}}' deepin 2> /dev/null)" != "true"  ]] ;do 
-        $(podman inspect deepin > /dev/null 2>&1)
-        if [[ $? -ne 0 ]]; then
+        attempts=$((attempts+1))
+        if [[ $attempts -gt 6 ]]; then
+            echo "Error: container 'deepin' cannot be started." >&2
+            echo "Please run 'podman ps -a' and 'podman logs deepin' to diagnose." >&2
+            exit 1
+        fi
+        if ! podman inspect deepin > /dev/null 2>&1; then
             # no container
             _init
             sleep 2
         else 
             if [[ "$(podman inspect -f '{{.State.Running}}' deepin 2> /dev/null)" != "true" ]]; then
                 # not running
-                $(podman container start deepin > /dev/null 2>&1)
-                if [[ $? -ne 0 ]]; then
-                    cleanup
-                fi
+                podman container start deepin > /dev/null 2>&1 || cleanup
             fi
         fi
     done
@@ -144,8 +147,8 @@ remove(){
 # Stop and rm container
 cleanup(){
     podman inspect -f '{{.Id}}' deepin
-    # podman stop deepin
-    podman rm deepin -f > /dev/null 2>&1
+    podman stop deepin > /dev/null 2>&1
+    podman rm deepin -f
     echo "clean up: stop&rm container"
 }
 
