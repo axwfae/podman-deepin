@@ -1,16 +1,14 @@
 # 上手🎉️
 
-本脚本依赖Docker，需要提前安装好Docker环境，如果以安装请忽略。
+本脚本依赖Podman，需要提前安装好Podman环境，如果已安装请忽略。
 
 Debian/Ubuntu安装方法：
 
 ```bash
 sudo apt update
-sudo apt install docker.io -y
-sudo usermod -aG docker $USER
-newgrp docker
+sudo apt install podman -y
 
-docker ps -a
+podman ps -a
 # 如果这里执行有问题需要重启
 ```
 
@@ -19,18 +17,18 @@ docker ps -a
 **注意不要使用sudo运行**
 
 ```bash
-> bash -c "$(curl -L https://git.io/JORao)" @ install deepin.com.qq.office deepin.com.wechat
+> bash -c "$(curl -L https://raw.githubusercontent.com/axwfae/podman-deepin/main/desktop/install.sh)" @ install deepin.com.qq.office deepin.com.wechat
 
 # 或者
-> git clone git@github.com:ygcaicn/docker-deepin.git
-> cd docker-deepin/desktop
+> git clone git@github.com:axwfae/podman-deepin.git
+> cd podman-deepin/desktop
 > ./install.sh install deepin.com.qq.office deepin.com.wechat
 ```
 
 ```bash
-> docker-deepin help
+> podman-deepin help
 
-Usage: docker-deepin COMMAND
+Usage: podman-deepin COMMAND
 
 Commands:
 
@@ -62,16 +60,16 @@ app list:
 
 更新脚本：
 ```
-bash -c "$(curl -L https://git.io/JORao)" @ update
+bash -c "$(curl -L https://raw.githubusercontent.com/axwfae/podman-deepin/main/desktop/install.sh)" @ update
 ```
 
 基本使用方法: 
 
-1. `docker-deepin init`
-2. `docker-deepin install deepin.com.wechat`
-3. `docker-deepin run deepin.com.wechat` 或者 点击图标运行（install完已经生成图标了）
+1. `podman-deepin init`
+2. `podman-deepin install deepin.com.wechat`
+3. `podman-deepin run deepin.com.wechat` 或者 点击图标运行（install完已经生成图标了）
 
-**遇到问题首先尝试：`docker-deepin cleanup`然后重新`docker-deepin init`。**
+**遇到问题首先尝试：`podman-deepin cleanup`然后重新`podman-deepin init`。**
 
 
 ![show](show.png)
@@ -84,7 +82,7 @@ bash -c "$(curl -L https://git.io/JORao)" @ update
 
 ```bash
 
-docker run -d --name deepin \
+podman run -d --name deepin \
     --device /dev/snd --ipc="host"\
     -v $HOME/deepin:/home/deepin \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
@@ -105,7 +103,7 @@ docker run -d --name deepin \
 容器中自带了WeChat和TIM。
 
 ```bash
-docker exec -t deepin sh -c "apt update && apt install -y  deepin.com.thunderspeed"
+podman exec -t deepin sh -c "apt update && apt install -y  deepin.com.thunderspeed"
 
 ```
 
@@ -140,32 +138,32 @@ deepin.net.cnki.cajviewer
 ### 查询软件包列表
 
 ```bash
-docker exec -t deepin sh -c "apt update && apt search  'Deepin Wine'"
+podman exec -t deepin sh -c "apt update && apt search  'Deepin Wine'"
 ```
 
 ## 启动
 
 ```bash
-# docker exec -d deepin tim.sh
-docker exec -d -u deepin deepin /opt/deepinwine/apps/Deepin-TIM/run.sh
-# docker exec -d deepin wechat.sh
-docker exec -d -u deepin deepin /opt/deepinwine/apps/Deepin-WeChat/run.sh
+# podman exec -d deepin tim.sh
+podman exec -d -u deepin deepin /opt/deepinwine/apps/Deepin-TIM/run.sh
+# podman exec -d deepin wechat.sh
+podman exec -d -u deepin deepin /opt/deepinwine/apps/Deepin-WeChat/run.sh
 ```
 
 ## 其它指令
 
 ```bash
 #进入容器
-docker exec -it deepin bash
+podman exec -it deepin bash
 #deepin身份进入
-docker exec -it -u deepin deepin bash
+podman exec -it -u deepin deepin bash
 #停止/启动容器
-docker stop deepin
-docker start deepin
+podman stop deepin
+podman start deepin
 #删除容器（出现问题时可以删除重建）
-docker rm deepin -f
+podman rm deepin -f
 #查看日志
-docker logs -f deepin
+podman logs -f deepin
 ```
 
 # 感谢
