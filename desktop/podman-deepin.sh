@@ -32,15 +32,15 @@ check_container(){
             echo "Please run 'podman ps -a' and 'podman logs deepin' to diagnose." >&2
             exit 1
         fi
-        if ! podman inspect deepin > /dev/null 2>&1; then
-            # no container
-            _init
-            sleep 2
-        else 
+        if podman container exists deepin 2> /dev/null; then
             if [[ "$(podman inspect -f '{{.State.Running}}' deepin 2> /dev/null)" != "true" ]]; then
                 # not running
                 podman container start deepin > /dev/null 2>&1 || cleanup
             fi
+        else
+            # no container
+            _init
+            sleep 2
         fi
     done
     podman inspect -f '{{.Id}}' deepin
@@ -146,9 +146,11 @@ remove(){
 
 # Stop and rm container
 cleanup(){
-    podman inspect -f '{{.Id}}' deepin
-    podman stop deepin > /dev/null 2>&1
-    podman rm deepin -f
+    if podman container exists deepin 2> /dev/null; then
+        podman inspect -f '{{.Id}}' deepin
+        podman stop deepin > /dev/null 2>&1
+        podman rm deepin -f
+    fi
     echo "clean up: stop&rm container"
 }
 
