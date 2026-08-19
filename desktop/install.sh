@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
-DEEPIN="${HOME}/.local/bin/docker-deepin.sh"
-REPO="https://raw.githubusercontent.com/ygcaicn/docker-deepin/main"
+DEEPIN="${HOME}/.local/bin/podman-deepin.sh"
+REPO="https://raw.githubusercontent.com/axwfae/podman-deepin/main"
 
-if ! [ -x "$(command -v docker)" ]; then
-        echo 'Error: docker is not installed.' >&2
+if ! [ -x "$(command -v podman)" ]; then
+        echo 'Error: podman is not installed.' >&2
         exit 1
 fi
 
 download(){
     [ ! -d ${HOME}/.local/bin/ ] && mkdir -p ${HOME}/.local/bin/ && source ~/.profile
-    curl -Ls -H "Cache-Control: no-cache" "${REPO}/desktop/docker-deepin.sh" -o ${DEEPIN}
+    curl -Ls -H "Cache-Control: no-cache" "${REPO}/desktop/podman-deepin.sh" -o ${DEEPIN}
     chmod +x ${DEEPIN}
-    ln -f ${DEEPIN} ${HOME}/.local/bin/docker-deepin
+    ln -f ${DEEPIN} ${HOME}/.local/bin/podman-deepin
 }
 
 install(){
@@ -20,7 +20,7 @@ install(){
     case $key in
         deepin.com.thunderspeed|deepin.com.taobao.wangwang|deepin.com.taobao.aliclient.qianniu|deepin.com.qq.rtx2015|deepin.com.qq.office|deepin.com.qq.im.light|deepin.com.qq.im|deepin.com.qq.b.eim|deepin.com.qq.b.crm|deepin.com.gtja.fuyi|deepin.com.foxmail|deepin.com.cmbchina|deepin.com.baidu.pan|deepin.com.aaa-logo|deepin.com.95579.cjsc|deepin.cn.com.winrar|deepin.cn.360.yasuo|deepin.com.wechat|deepin.com.weixin.work|deepin.net.263.em|deepin.org.7-zip|deepin.org.foobar2000|deepin.net.cnki.cajviewer)
             app=$key
-            ${DEEPIN} install app
+            ${DEEPIN} install $app
         ;;
         *)
             echo "Unknown opt."
@@ -31,7 +31,7 @@ install(){
 
 update(){
     rm -f ${DEEPIN}
-    rm ${HOME}/.local/bin/docker-deepin
+    rm ${HOME}/.local/bin/podman-deepin
     download
 }
 
