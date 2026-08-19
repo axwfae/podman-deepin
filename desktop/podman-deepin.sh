@@ -19,7 +19,7 @@ _init(){
         -e GID=`id -g` \
         -e UID=`id -u` \
         jachin007/deepin \
-        ping -i 30 bing.com -D
+        sleep infinity
 }
 
 check_container(){
