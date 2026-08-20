@@ -141,7 +141,30 @@ install(){
 }
 
 remove(){
-    echo "remove"
+    app=$1
+    if [ -z "$app" ]; then
+        echo "Usage: podman-deepin remove <app>"
+        exit 1
+    fi
+    # remove desktop file
+    desktop="${HOME}/.local/share/applications/${app}.desktop"
+    if [ -f "$desktop" ]; then
+        rm -f "$desktop"
+        echo "remove desktop: $desktop"
+    fi
+    # remove icons
+    icons="${HOME}/.local/share/icons"
+    if [ -d "$icons" ]; then
+        find "$icons" -type f -name "${app}.*" -delete
+        echo "remove icons: $icons/${app}.*"
+    fi
+    # remove run script
+    run_script="${HOME}/deepin/run/${app}.sh"
+    if [ -f "$run_script" ]; then
+        rm -f "$run_script"
+        echo "remove run script: $run_script"
+    fi
+    return 0
 }
 
 # Stop and rm container
